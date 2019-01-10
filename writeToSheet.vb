@@ -1,17 +1,14 @@
 Imports Google.Apis.Sheets.v4
 Imports Google.Apis.Sheets.v4.Data
-    Public Sub insertToSheet()       
-		
-		Static Dim Scopes As String() = {SheetsService.Scope.Spreadsheets} 'If changing the scope then delete  App_Data\MyGoogleStorage\.credentials\sheets.googleapis.com-dotnet-quickstart.json
-
-		Dim ApplicationName As String = "Google Sheets API .NET Quickstart" 'Tutorial name for .net api
-
-		Dim location = Server.MapPath("client_secret.json") 'Designate file with sheets api key and use it to setup authentication
-		Using stream = New FileStream(location, FileMode.Open, FileAccess.Read) 'Read file and setup credentials for sheets api
-			Dim credPath As String = System.Web.HttpContext.Current.Server.MapPath("/App_Data/MyGoogleStorage")
-			credPath = Path.Combine(credPath, ".credentials/sheets.googleapis.com-dotnet-quickstart.json")
-			Dim credential As UserCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, Scopes, "user", CancellationToken.None, New FileDataStore(credPath, True)).Result
-		End Using
+    Public Sub insertToSheet()       	
+	Static Dim Scopes As String() = {SheetsService.Scope.Spreadsheets} 'If changing the scope then delete  App_Data\MyGoogleStorage\.credentials\sheets.googleapis.com-dotnet-quickstart.json
+	Dim ApplicationName As String = "Google Sheets API .NET Quickstart" 'Tutorial name for .net api
+	Dim location = Server.MapPath("client_secret.json") 'Designate file with sheets api key and use it to setup authentication
+	Using stream = New FileStream(location, FileMode.Open, FileAccess.Read) 'Read file and setup credentials for sheets api
+		Dim credPath As String = System.Web.HttpContext.Current.Server.MapPath("/App_Data/MyGoogleStorage")
+		credPath = Path.Combine(credPath, ".credentials/sheets.googleapis.com-dotnet-quickstart.json")
+		Dim credential As UserCredential = GoogleWebAuthorizationBroker.AuthorizeAsync(GoogleClientSecrets.Load(stream).Secrets, Scopes, "user", CancellationToken.None, New FileDataStore(credPath, True)).Result
+	End Using
 		
         Dim service = New SheetsService(New BaseClientService.Initializer() With {.HttpClientInitializer = credential, .ApplicationName = ApplicationName}) 'Create Google Sheets API service for connecting to the API.
         Dim spreadsheetId As String = "Spread sheet ID here"
@@ -27,4 +24,4 @@ Imports Google.Apis.Sheets.v4.Data
 		End If 'If not adding new row then will overwrite cell
 		writeCellRowRequest.ValueInputOption = SpreadsheetsResource.ValuesResource.AppendRequest.ValueInputOptionEnum.RAW
 		writeCellRowRequest.Execute()
-	End Sub
+End Sub
